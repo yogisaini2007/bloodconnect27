@@ -16,9 +16,9 @@ export function BottomNav({ unread = 0 }: { unread?: number }) {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-border bg-card pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-border bg-card px-2 pb-[env(safe-area-inset-bottom)] pt-1.5 shadow-[0_-4px_20px_oklch(0.208_0.04_265.8/6%)]"
     >
-      <ul className="grid grid-cols-5">
+      <ul className="grid grid-cols-5 gap-1">
         {TABS.map(({ to, label, Icon }) => {
           const active = pathname === to || pathname.startsWith(to + "/");
           return (
@@ -26,14 +26,16 @@ export function BottomNav({ unread = 0 }: { unread?: number }) {
               <Link
                 to={to}
                 className={cn(
-                  "relative flex min-h-14 flex-col items-center justify-center gap-1 py-2 text-[11px] font-medium transition-colors",
-                  active ? "text-primary" : "text-muted-foreground",
+                  "relative flex min-h-13 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-[11px] font-semibold transition-all",
+                  active
+                    ? "bg-primary text-primary-foreground shadow-[0_6px_16px_oklch(0.585_0.207_27.3/32%)]"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <Icon className="size-5" aria-hidden />
                 {label}
                 {label === "Alerts" && unread > 0 && (
-                  <span className="absolute right-1/2 top-1.5 translate-x-4 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-primary-foreground">
+                  <span className="absolute right-1.5 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold leading-none text-primary-foreground ring-2 ring-card">
                     {unread > 9 ? "9+" : unread}
                   </span>
                 )}
