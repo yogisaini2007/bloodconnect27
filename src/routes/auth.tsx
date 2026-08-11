@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Droplet, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import logo from "@/assets/bloodconnect-logo.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -93,10 +94,12 @@ function AuthPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center bg-background px-6 py-10">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-primary-soft text-primary">
-          <Droplet className="size-9 fill-current" aria-hidden />
-        </div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-primary">BloodConnect</h1>
+        <img
+          src={logo.url}
+          alt="BloodConnect logo"
+          className="mx-auto mb-4 h-24 w-auto"
+        />
+        <h1 className="sr-only">BloodConnect</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Find Blood Donors Near You, Save Lives.
         </p>

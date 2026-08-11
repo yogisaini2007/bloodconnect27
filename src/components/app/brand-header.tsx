@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Droplet } from "lucide-react";
+import logo from "@/assets/bloodconnect-logo.png.asset.json";
 import { cn } from "@/lib/utils";
 
 /** Wordmark header matching the BloodConnect brand sheet. */
@@ -17,9 +17,7 @@ export function BrandHeader({
         className,
       )}
     >
-      <span className="flex size-8 items-center justify-center rounded-xl bg-primary-soft text-primary">
-        <Droplet className="size-4 fill-current" aria-hidden />
-      </span>
+      <img src={logo.url} alt="" aria-hidden className="size-8 object-contain" />
       <h1 className="flex-1 text-center text-lg font-extrabold tracking-tight text-primary">
         BloodConnect
       </h1>
