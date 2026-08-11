@@ -93,14 +93,15 @@ function AuthPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center bg-background px-6 py-10">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-sos)]">
-          <HeartPulse className="size-8" aria-hidden />
+        <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-primary-soft text-primary">
+          <Droplet className="size-9 fill-current" aria-hidden />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">BLOODCONNECT</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-primary">BloodConnect</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Real-time emergency blood donor matching
+          Find Blood Donors Near You, Save Lives.
         </p>
       </div>
+
 
       {sentConfirmation ? (
         <div className="rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)]">
