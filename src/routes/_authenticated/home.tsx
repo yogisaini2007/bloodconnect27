@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, useRealtime } from "@/hooks/useProfile";
-import { AppHeader, EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
+import { EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
 import { BottomNav } from "@/components/app/bottom-nav";
 import { BrandHeader, QuickAction } from "@/components/app/brand-header";
 import { BloodChip } from "@/components/app/chips";
