@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useProfile, useRealtime } from "@/hooks/useProfile";
 import { AppHeader, EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
 import { BottomNav } from "@/components/app/bottom-nav";
+import { BrandHeader, QuickAction } from "@/components/app/brand-header";
 import { BloodChip } from "@/components/app/chips";
 import { RequestCard, type RequestCardData } from "@/components/app/request-card";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,16 @@ import { Switch } from "@/components/ui/switch";
 import { daysUntilEligible } from "@/lib/blood";
 import { requestBrowserLocation } from "@/lib/geo";
 import { toast } from "sonner";
-import { Droplets, MapPin, Siren, RefreshCw, Inbox } from "lucide-react";
+import {
+  Droplets,
+  MapPin,
+  Siren,
+  RefreshCw,
+  Inbox,
+  Heart,
+  MessageCircle,
+  UserRound,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/home")({
   component: HomeScreen,
