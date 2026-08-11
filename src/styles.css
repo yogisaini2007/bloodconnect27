@@ -65,19 +65,19 @@
 :root {
   --radius: 0.75rem;
 
-  --background: oklch(0.976 0 90);
-  --foreground: oklch(0.248 0 90);
+  --background: oklch(0.984 0.003 247.9);
+  --foreground: oklch(0.208 0.04 265.8);
   --card: oklch(1 0 90);
-  --card-foreground: oklch(0.248 0 90);
+  --card-foreground: oklch(0.208 0.04 265.8);
   --popover: oklch(1 0 90);
-  --popover-foreground: oklch(0.248 0 90);
+  --popover-foreground: oklch(0.208 0.04 265.8);
 
-  --primary: oklch(0.539 0.194 26.7);
+  --primary: oklch(0.585 0.207 27.3);
   --primary-foreground: oklch(1 0 90);
-  --primary-dark: oklch(0.406 0.167 29.2);
-  --primary-soft: oklch(0.957 0.022 7.2);
+  --primary-dark: oklch(0.451 0.178 28.5);
+  --primary-soft: oklch(0.96 0.024 17);
 
-  --secondary: oklch(0.309 0.019 229.8);
+  --secondary: oklch(0.279 0.041 260.2);
   --secondary-foreground: oklch(1 0 90);
 
   --muted: oklch(0.955 0.002 240);
