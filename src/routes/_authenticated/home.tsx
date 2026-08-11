@@ -284,7 +284,20 @@ function HomeScreen() {
         </p>
       </div>
 
+      {/* Floating SOS */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-40 mx-auto flex max-w-md justify-center px-4 pb-[env(safe-area-inset-bottom)]">
+        <button
+          type="button"
+          onClick={() => navigate({ to: "/sos" })}
+          className="sos-pulse pointer-events-auto inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-[var(--shadow-sos)] transition-transform active:scale-95"
+        >
+          <Siren className="size-5" aria-hidden />
+          SOS — Need Blood Now
+        </button>
+      </div>
+
       <BottomNav unread={unread.data ?? 0} />
+
     </div>
   );
 }
