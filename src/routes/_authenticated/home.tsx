@@ -4,8 +4,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, useRealtime } from "@/hooks/useProfile";
-import { AppHeader, EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
+import { EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
 import { BottomNav } from "@/components/app/bottom-nav";
+import { BrandHeader, QuickAction } from "@/components/app/brand-header";
 import { BloodChip } from "@/components/app/chips";
 import { RequestCard, type RequestCardData } from "@/components/app/request-card";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,16 @@ import { Switch } from "@/components/ui/switch";
 import { daysUntilEligible } from "@/lib/blood";
 import { requestBrowserLocation } from "@/lib/geo";
 import { toast } from "sonner";
-import { Droplets, MapPin, Siren, RefreshCw, Inbox } from "lucide-react";
+import {
+  Droplets,
+  MapPin,
+  Siren,
+  RefreshCw,
+  Inbox,
+  Heart,
+  MessageCircle,
+  UserRound,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/home")({
   component: HomeScreen,
@@ -126,21 +136,55 @@ function HomeScreen() {
     Date.now() - new Date(profile.location_updated_at).getTime() > 24 * 3600 * 1000;
 
   return (
-    <div className="mx-auto min-h-screen max-w-md bg-background pb-24">
-      <AppHeader
-        title={profile?.full_name ? `Hi, ${profile.full_name.split(" ")[0]}` : "BLOODCONNECT"}
-        subtitle="Every donation saves a life"
-        tone="brand"
-        action={
-          profile?.blood_group ? (
-            <BloodChip group={profile.blood_group} size="sm" className="bg-primary-dark" />
-          ) : undefined
+    <div className="mx-auto min-h-screen max-w-md bg-background pb-32">
+      <BrandHeader
+        right={
+          profile?.blood_group ? <BloodChip group={profile.blood_group} size="sm" /> : undefined
         }
       />
 
       <div className="space-y-6 px-4 py-5">
+        {/* Welcome */}
+        <section>
+          <h2 className="text-2xl font-extrabold tracking-tight">
+            Welcome,{" "}
+            <span className="text-primary">
+              {profile?.full_name ? profile.full_name.split(" ")[0] : "User"}
+            </span>
+          </h2>
+          <p className="text-sm text-muted-foreground">Ready to save a life today?</p>
+        </section>
+
+        {/* Quick actions */}
+        <section className="grid grid-cols-2 gap-3">
+          <QuickAction
+            label="Need Blood"
+            tone="primary"
+            icon={<Droplets className="size-5" aria-hidden />}
+            onClick={() => navigate({ to: "/sos" })}
+          />
+          <QuickAction
+            label="Donate Blood"
+            tone="success"
+            icon={<Heart className="size-5 fill-current" aria-hidden />}
+            onClick={() => navigate({ to: "/requests" })}
+          />
+          <QuickAction
+            label="Messages"
+            tone="secondary"
+            icon={<MessageCircle className="size-5" aria-hidden />}
+            onClick={() => navigate({ to: "/chat" })}
+          />
+          <QuickAction
+            label="My Profile"
+            tone="muted"
+            icon={<UserRound className="size-5" aria-hidden />}
+            onClick={() => navigate({ to: "/profile" })}
+          />
+        </section>
+
         {/* Availability + eligibility */}
-        <section className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+        <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Donor availability</p>
@@ -157,7 +201,7 @@ function HomeScreen() {
             />
           </div>
 
-          <div className="mt-3 rounded-lg bg-muted px-3 py-2 text-xs">
+          <div className="mt-3 rounded-xl bg-muted px-3 py-2 text-xs">
             {cooldown > 0 ? (
               <span className="font-medium text-warning">
                 Not eligible yet — {cooldown} day{cooldown > 1 ? "s" : ""} left of the 90-day
@@ -169,28 +213,13 @@ function HomeScreen() {
           </div>
         </section>
 
-        {/* SOS */}
-        <section className="rounded-2xl border border-primary/25 bg-primary-soft p-5 text-center">
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/sos" })}
-            className="sos-pulse mx-auto flex size-36 flex-col items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-sos)] transition-transform active:scale-95"
-          >
-            <Siren className="size-9" aria-hidden />
-            <span className="mt-1 text-xl font-bold">SOS</span>
-            <span className="text-[11px] font-medium opacity-90">Request blood</span>
-          </button>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Broadcasts to eligible donors near your hospital within seconds.
-          </p>
-        </section>
-
         {/* Location status */}
-        <section className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
+        <section className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
           <MapPin
             className={hasLocation ? "size-5 text-success" : "size-5 text-warning"}
             aria-hidden
           />
+
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold">
               {hasLocation ? (staleLocation ? "Location may be outdated" : "Location active") : "Location not set"}
@@ -255,7 +284,20 @@ function HomeScreen() {
         </p>
       </div>
 
+      {/* Floating SOS */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-40 mx-auto flex max-w-md justify-center px-4 pb-[env(safe-area-inset-bottom)]">
+        <button
+          type="button"
+          onClick={() => navigate({ to: "/sos" })}
+          className="sos-pulse pointer-events-auto inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-[var(--shadow-sos)] transition-transform active:scale-95"
+        >
+          <Siren className="size-5" aria-hidden />
+          SOS — Need Blood Now
+        </button>
+      </div>
+
       <BottomNav unread={unread.data ?? 0} />
+
     </div>
   );
 }
