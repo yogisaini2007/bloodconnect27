@@ -9,7 +9,7 @@ import { BloodChip } from "@/components/app/chips";
 import { Button } from "@/components/ui/button";
 import { daysUntilEligible, DONATION_COOLDOWN_DAYS } from "@/lib/blood";
 import { toast } from "sonner";
-import { Droplet, LogOut, MapPin, Pencil, Phone, ShieldCheck } from "lucide-react";
+import { Droplet, Info, LogOut, MapPin, Pencil, Phone, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfileScreen,
@@ -145,9 +145,16 @@ function ProfileScreen() {
           their request.
         </section>
 
+        <Button asChild variant="ghost" className="h-11 w-full">
+          <Link to="/about">
+            <Info className="mr-2 size-4" /> About BloodConnect
+          </Link>
+        </Button>
+
         <Button variant="outline" className="h-12 w-full" onClick={signOut}>
           <LogOut className="mr-2 size-4" /> Sign out
         </Button>
+
       </div>
 
       <BottomNav />

@@ -73,6 +73,12 @@ function Landing() {
             Sign in
           </Link>
         </p>
+        <p className="text-center text-xs text-muted-foreground">
+          <Link to="/about" className="font-semibold text-primary underline underline-offset-4">
+            About BloodConnect
+          </Link>
+        </p>
+
       </section>
     </main>
   );
