@@ -145,9 +145,16 @@ function ProfileScreen() {
           their request.
         </section>
 
+        <Button asChild variant="ghost" className="h-11 w-full">
+          <Link to="/about">
+            <Info className="mr-2 size-4" /> About BloodConnect
+          </Link>
+        </Button>
+
         <Button variant="outline" className="h-12 w-full" onClick={signOut}>
           <LogOut className="mr-2 size-4" /> Sign out
         </Button>
+
       </div>
 
       <BottomNav />
