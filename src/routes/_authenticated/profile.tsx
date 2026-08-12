@@ -9,7 +9,7 @@ import { BloodChip } from "@/components/app/chips";
 import { Button } from "@/components/ui/button";
 import { daysUntilEligible, DONATION_COOLDOWN_DAYS } from "@/lib/blood";
 import { toast } from "sonner";
-import { Droplet, LogOut, MapPin, Pencil, Phone, ShieldCheck } from "lucide-react";
+import { Droplet, Info, LogOut, MapPin, Pencil, Phone, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfileScreen,
