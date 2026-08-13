@@ -71,17 +71,6 @@ function SosWizard() {
     }
   }, [profile, coords]);
 
-  async function useHospitalLocation() {
-    setLocating(true);
-    const result = await requestBrowserLocation();
-    setLocating(false);
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
-    }
-    setCoords({ lat: result.lat, lng: result.lng });
-    toast.success("Hospital location captured");
-  }
 
   async function submit() {
     if (submitting || !userId) return;
