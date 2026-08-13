@@ -50,7 +50,7 @@ function Onboarding() {
     last_donation_date: "",
   });
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [saving2] = useState(false);
+  
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
