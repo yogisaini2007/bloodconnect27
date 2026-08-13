@@ -69,17 +69,6 @@ function Onboarding() {
     }
   }, [profile]);
 
-  async function useMyLocation() {
-    setLocating(true);
-    const result = await requestBrowserLocation();
-    setLocating(false);
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
-    }
-    setCoords({ lat: result.lat, lng: result.lng });
-    toast.success("Location captured");
-  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
