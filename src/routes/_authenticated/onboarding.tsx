@@ -200,38 +200,22 @@ function Onboarding() {
           />
         </Field>
 
-        <Field label="Current address" error={errors['current_address']}>
-          <Textarea
-            value={form.current_address}
-            maxLength={300}
-            rows={2}
-            onChange={(e) => setForm({ ...form, current_address: e.target.value })}
-            placeholder="Where you are staying right now"
-          />
-        </Field>
+        <LocationPicker
+          label="Current address"
+          hint="Type your area or use GPS so we can match emergencies near you."
+          placeholder="Where you are staying right now"
+          value={{
+            address: form.current_address,
+            lat: coords?.lat ?? null,
+            lng: coords?.lng ?? null,
+          }}
+          onChange={(next) => {
+            setForm((f) => ({ ...f, current_address: next.address }));
+            setCoords(next.lat != null && next.lng != null ? { lat: next.lat, lng: next.lng } : null);
+          }}
+          error={errors['current_address']}
+        />
 
-        <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">Location for matching</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {coords
-              ? `Saved: ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
-              : "We use your GPS position to find emergencies near you."}
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-3 w-full"
-            onClick={useMyLocation}
-            disabled={locating}
-          >
-            {locating ? (
-              <Loader2 className="mr-1.5 size-4 animate-spin" />
-            ) : (
-              <MapPin className="mr-1.5 size-4" />
-            )}
-            {coords ? "Update location" : "Use my current location"}
-          </Button>
-        </div>
 
         <Button type="submit" className="h-12 w-full text-base" disabled={saving}>
           {saving && <Loader2 className="mr-2 size-4 animate-spin" />}
