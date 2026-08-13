@@ -321,28 +321,6 @@ function SosWizard() {
               />
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-sm font-semibold">Hospital location</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {coords
-                  ? `Pinned at ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
-                  : "Required to match donors by distance."}
-              </p>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-3 w-full"
-                onClick={useHospitalLocation}
-                disabled={locating}
-              >
-                {locating ? (
-                  <Loader2 className="mr-1.5 size-4 animate-spin" />
-                ) : (
-                  <MapPin className="mr-1.5 size-4" />
-                )}
-                {coords ? "Update pinned location" : "Pin my current location"}
-              </Button>
-            </div>
           </>
         )}
 
