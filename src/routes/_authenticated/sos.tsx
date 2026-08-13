@@ -54,7 +54,7 @@ function SosWizard() {
   const [requiredBy, setRequiredBy] = useState("");
   const [radius, setRadius] = useState(10);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [locating, setLocating] = useState(false);
+  
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [details, setDetails] = useState({
