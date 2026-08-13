@@ -5,6 +5,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordStrength } from "@/components/app/password-strength";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -269,7 +270,13 @@ function AuthPage() {
                   placeholder="At least 6 characters"
                   className="h-12"
                   required
+                  aria-describedby={mode === "signup" ? "password-tips" : undefined}
                 />
+                {mode === "signup" && (
+                  <div id="password-tips">
+                    <PasswordStrength value={password} />
+                  </div>
+                )}
               </div>
               <Button type="submit" className="h-12 w-full text-base" disabled={busy}>
                 {busy && <Loader2 className="mr-2 size-4 animate-spin" />}
