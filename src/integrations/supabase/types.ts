@@ -282,6 +282,7 @@ export type Database = {
           response_status: Database["public"]["Enums"]["response_status"]
         }[]
       }
+      has_responded: { Args: { p_request_id: string }; Returns: boolean }
       is_eligible: { Args: { last_donation: string }; Returns: boolean }
       nearby_requests: {
         Args: never
