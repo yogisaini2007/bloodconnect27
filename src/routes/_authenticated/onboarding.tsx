@@ -11,10 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BLOOD_GROUPS, type BloodGroup, daysUntilEligible } from "@/lib/blood";
-import { requestBrowserLocation } from "@/lib/geo";
+import { LocationPicker, type LocationValue } from "@/components/app/location-picker";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Loader2, MapPin } from "lucide-react";
+import { Loader2 } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
