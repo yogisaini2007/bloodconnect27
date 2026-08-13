@@ -18,10 +18,11 @@ import {
   type BloodGroup,
   type Urgency,
 } from "@/lib/blood";
-import { requestBrowserLocation } from "@/lib/geo";
+import { LocationPicker } from "@/components/app/location-picker";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Loader2, MapPin, Minus, Plus, Siren } from "lucide-react";
+import { Loader2, Minus, Plus, Siren } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/sos")({
   component: SosWizard,
