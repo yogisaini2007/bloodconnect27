@@ -15,6 +15,11 @@ import { daysUntilEligible } from "@/lib/blood";
 import { requestBrowserLocation } from "@/lib/geo";
 import { toast } from "sonner";
 import {
+  OnboardingTour,
+  HOME_TOUR_STEPS,
+  shouldAutoStartTour,
+} from "@/components/app/onboarding-tour";
+import {
   Droplets,
   MapPin,
   Siren,
@@ -35,6 +40,21 @@ function HomeScreen() {
   const queryClient = useQueryClient();
   const { data: profile, isLoading } = useProfile(userId);
   const [locating, setLocating] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
+
+  useEffect(() => {
+    if (isLoading || !profile?.onboarded) return;
+    if (typeof window !== "undefined" && window.location.hash === "#tour") {
+      history.replaceState(null, "", window.location.pathname);
+      setTourOpen(true);
+      return;
+    }
+    if (shouldAutoStartTour()) {
+      const id = window.setTimeout(() => setTourOpen(true), 600);
+      return () => window.clearTimeout(id);
+    }
+    return;
+  }, [isLoading, profile?.onboarded]);
 
   useEffect(() => {
     if (!isLoading && profile && !profile.onboarded) {
@@ -145,7 +165,7 @@ function HomeScreen() {
 
       <div className="space-y-6 px-4 py-5">
         {/* Welcome */}
-        <section>
+        <section data-tour="dashboard">
           <h2 className="text-2xl font-extrabold tracking-tight">
             Welcome,{" "}
             <span className="text-primary">
@@ -156,7 +176,7 @@ function HomeScreen() {
         </section>
 
         {/* Quick actions */}
-        <section className="grid grid-cols-2 gap-3">
+        <section data-tour="quick-actions" className="grid grid-cols-2 gap-3">
           <QuickAction
             label="Need Blood"
             tone="primary"
@@ -184,7 +204,7 @@ function HomeScreen() {
         </section>
 
         {/* Availability + eligibility */}
-        <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+        <section data-tour="availability" className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Donor availability</p>
@@ -295,6 +315,12 @@ function HomeScreen() {
           SOS — Need Blood Now
         </button>
       </div>
+
+      <OnboardingTour
+        steps={HOME_TOUR_STEPS}
+        open={tourOpen}
+        onClose={() => setTourOpen(false)}
+      />
 
       <BottomNav unread={unread.data ?? 0} />
 
