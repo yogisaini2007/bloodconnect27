@@ -34,7 +34,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     placement: "bottom",
   },
   {
-    target: '[data-tour="nav-notifications"]',
+    target: '[data-tour="nav-alerts"]',
     title: "Stay Updated 🔔",
     description: "Check alerts here for new requests and donor responses.",
     placement: "top",

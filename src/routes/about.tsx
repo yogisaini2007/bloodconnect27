@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Github, Linkedin, ArrowLeft } from "lucide-react";
+import { Github, Linkedin, ArrowLeft, Mail } from "lucide-react";
 import logo from "@/assets/bloodconnect-logo.png.asset.json";
 import founder from "@/assets/yogesh-saini.png.asset.json";
 
+const EMAIL = "yogisaini2007@gmail.com";
 const GITHUB = "https://github.com/yogisaini2007";
 const LINKEDIN =
   "https://www.linkedin.com/in/yogesh-saini-2678b9324?utm_source=share_via&utm_content=profile&utm_medium=member_android";
@@ -79,6 +80,13 @@ function AboutPage() {
           <ConnectCard href={LINKEDIN} icon={<Linkedin className="size-5" />} label="LinkedIn" />
           <ConnectCard href={GITHUB} icon={<Github className="size-5" />} label="GitHub" />
         </div>
+        <a
+          href={`mailto:${EMAIL}`}
+          className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-card px-4 py-4 text-primary transition-colors hover:bg-primary-soft"
+        >
+          <Mail className="size-5" aria-hidden />
+          <span className="text-xs font-semibold text-foreground">{EMAIL}</span>
+        </a>
 
         <p className="mt-8 text-center text-[11px] text-muted-foreground">
           © 2026 Yogesh Saini. All rights reserved.
