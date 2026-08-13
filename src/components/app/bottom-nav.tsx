@@ -25,6 +25,7 @@ export function BottomNav({ unread = 0 }: { unread?: number }) {
             <li key={to}>
               <Link
                 to={to}
+                data-tour={"nav-" + label.toLowerCase()}
                 className={cn(
                   "relative flex min-h-13 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-[11px] font-semibold transition-all",
                   active

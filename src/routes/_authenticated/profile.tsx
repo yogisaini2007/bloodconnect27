@@ -9,7 +9,8 @@ import { BloodChip } from "@/components/app/chips";
 import { Button } from "@/components/ui/button";
 import { daysUntilEligible, DONATION_COOLDOWN_DAYS } from "@/lib/blood";
 import { toast } from "sonner";
-import { Droplet, Info, LogOut, MapPin, Pencil, Phone, ShieldCheck } from "lucide-react";
+import { Droplet, Info, LogOut, MapPin, Pencil, Phone, ShieldCheck, Compass } from "lucide-react";
+import { resetTour } from "@/components/app/onboarding-tour";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfileScreen,
@@ -144,6 +145,17 @@ function ProfileScreen() {
           Your phone number and exact location are only shared with a requester after you accept
           their request.
         </section>
+
+        <Button
+          variant="ghost"
+          className="h-11 w-full"
+          onClick={() => {
+            resetTour();
+            void navigate({ to: "/home", hash: "tour" });
+          }}
+        >
+          <Compass className="mr-2 size-4" /> Restart app tour
+        </Button>
 
         <Button asChild variant="ghost" className="h-11 w-full">
           <Link to="/about">
