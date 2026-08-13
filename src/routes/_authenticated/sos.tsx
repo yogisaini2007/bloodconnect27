@@ -263,20 +263,24 @@ function SosWizard() {
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address">Hospital address</Label>
-              <Textarea
-                id="address"
-                value={details.hospital_address}
-                maxLength={300}
-                rows={2}
-                onChange={(e) => setDetails({ ...details, hospital_address: e.target.value })}
-                placeholder="Street, area, city"
-              />
-              {errors['hospital_address'] && (
-                <p className="text-xs font-medium text-destructive">{errors['hospital_address']}</p>
-              )}
-            </div>
+            <LocationPicker
+              label="Hospital address"
+              hint="Search the hospital or use GPS so donors see the distance."
+              placeholder="Hospital, street, area, city"
+              value={{
+                address: details.hospital_address,
+                lat: coords?.lat ?? null,
+                lng: coords?.lng ?? null,
+              }}
+              onChange={(next) => {
+                setDetails((d) => ({ ...d, hospital_address: next.address }));
+                setCoords(
+                  next.lat != null && next.lng != null ? { lat: next.lat, lng: next.lng } : null,
+                );
+              }}
+              error={errors['hospital_address']}
+            />
+
 
             <div className="space-y-2">
               <Label htmlFor="hphone">Hospital / ward phone (optional)</Label>
