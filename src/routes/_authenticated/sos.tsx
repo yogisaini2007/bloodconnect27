@@ -18,10 +18,11 @@ import {
   type BloodGroup,
   type Urgency,
 } from "@/lib/blood";
-import { requestBrowserLocation } from "@/lib/geo";
+import { LocationPicker } from "@/components/app/location-picker";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Loader2, MapPin, Minus, Plus, Siren } from "lucide-react";
+import { Loader2, Minus, Plus, Siren } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/sos")({
   component: SosWizard,
@@ -53,7 +54,7 @@ function SosWizard() {
   const [requiredBy, setRequiredBy] = useState("");
   const [radius, setRadius] = useState(10);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [locating, setLocating] = useState(false);
+  
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [details, setDetails] = useState({
@@ -70,17 +71,6 @@ function SosWizard() {
     }
   }, [profile, coords]);
 
-  async function useHospitalLocation() {
-    setLocating(true);
-    const result = await requestBrowserLocation();
-    setLocating(false);
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
-    }
-    setCoords({ lat: result.lat, lng: result.lng });
-    toast.success("Hospital location captured");
-  }
 
   async function submit() {
     if (submitting || !userId) return;
@@ -263,20 +253,24 @@ function SosWizard() {
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address">Hospital address</Label>
-              <Textarea
-                id="address"
-                value={details.hospital_address}
-                maxLength={300}
-                rows={2}
-                onChange={(e) => setDetails({ ...details, hospital_address: e.target.value })}
-                placeholder="Street, area, city"
-              />
-              {errors['hospital_address'] && (
-                <p className="text-xs font-medium text-destructive">{errors['hospital_address']}</p>
-              )}
-            </div>
+            <LocationPicker
+              label="Hospital address"
+              hint="Search the hospital or use GPS so donors see the distance."
+              placeholder="Hospital, street, area, city"
+              value={{
+                address: details.hospital_address,
+                lat: coords?.lat ?? null,
+                lng: coords?.lng ?? null,
+              }}
+              onChange={(next) => {
+                setDetails((d) => ({ ...d, hospital_address: next.address }));
+                setCoords(
+                  next.lat != null && next.lng != null ? { lat: next.lat, lng: next.lng } : null,
+                );
+              }}
+              error={errors['hospital_address']}
+            />
+
 
             <div className="space-y-2">
               <Label htmlFor="hphone">Hospital / ward phone (optional)</Label>
@@ -316,28 +310,6 @@ function SosWizard() {
               />
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-sm font-semibold">Hospital location</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {coords
-                  ? `Pinned at ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
-                  : "Required to match donors by distance."}
-              </p>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-3 w-full"
-                onClick={useHospitalLocation}
-                disabled={locating}
-              >
-                {locating ? (
-                  <Loader2 className="mr-1.5 size-4 animate-spin" />
-                ) : (
-                  <MapPin className="mr-1.5 size-4" />
-                )}
-                {coords ? "Update pinned location" : "Pin my current location"}
-              </Button>
-            </div>
           </>
         )}
 

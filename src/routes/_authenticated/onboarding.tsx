@@ -11,10 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BLOOD_GROUPS, type BloodGroup, daysUntilEligible } from "@/lib/blood";
-import { requestBrowserLocation } from "@/lib/geo";
+import { LocationPicker } from "@/components/app/location-picker";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Loader2, MapPin } from "lucide-react";
+import { Loader2 } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   component: Onboarding,
@@ -49,7 +50,7 @@ function Onboarding() {
     last_donation_date: "",
   });
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [locating, setLocating] = useState(false);
+  
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -68,17 +69,6 @@ function Onboarding() {
     }
   }, [profile]);
 
-  async function useMyLocation() {
-    setLocating(true);
-    const result = await requestBrowserLocation();
-    setLocating(false);
-    if (!result.ok) {
-      toast.error(result.message);
-      return;
-    }
-    setCoords({ lat: result.lat, lng: result.lng });
-    toast.success("Location captured");
-  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -200,38 +190,22 @@ function Onboarding() {
           />
         </Field>
 
-        <Field label="Current address" error={errors['current_address']}>
-          <Textarea
-            value={form.current_address}
-            maxLength={300}
-            rows={2}
-            onChange={(e) => setForm({ ...form, current_address: e.target.value })}
-            placeholder="Where you are staying right now"
-          />
-        </Field>
+        <LocationPicker
+          label="Current address"
+          hint="Type your area or use GPS so we can match emergencies near you."
+          placeholder="Where you are staying right now"
+          value={{
+            address: form.current_address,
+            lat: coords?.lat ?? null,
+            lng: coords?.lng ?? null,
+          }}
+          onChange={(next) => {
+            setForm((f) => ({ ...f, current_address: next.address }));
+            setCoords(next.lat != null && next.lng != null ? { lat: next.lat, lng: next.lng } : null);
+          }}
+          error={errors['current_address']}
+        />
 
-        <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-semibold">Location for matching</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {coords
-              ? `Saved: ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
-              : "We use your GPS position to find emergencies near you."}
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-3 w-full"
-            onClick={useMyLocation}
-            disabled={locating}
-          >
-            {locating ? (
-              <Loader2 className="mr-1.5 size-4 animate-spin" />
-            ) : (
-              <MapPin className="mr-1.5 size-4" />
-            )}
-            {coords ? "Update location" : "Use my current location"}
-          </Button>
-        </div>
 
         <Button type="submit" className="h-12 w-full text-base" disabled={saving}>
           {saving && <Loader2 className="mr-2 size-4 animate-spin" />}
