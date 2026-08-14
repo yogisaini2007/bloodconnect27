@@ -152,12 +152,15 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ban_reason: string | null
+          banned_at: string | null
           blood_group: Database["public"]["Enums"]["blood_group"] | null
           created_at: string
           current_address: string
           full_name: string
           id: string
           is_available: boolean
+          is_banned: boolean
           last_donation_date: string | null
           lat: number | null
           lng: number | null
@@ -165,15 +168,20 @@ export type Database = {
           onboarded: boolean
           permanent_address: string
           phone: string
+          restricted: boolean
           updated_at: string
+          valid_report_count: number
         }
         Insert: {
+          ban_reason?: string | null
+          banned_at?: string | null
           blood_group?: Database["public"]["Enums"]["blood_group"] | null
           created_at?: string
           current_address?: string
           full_name?: string
           id: string
           is_available?: boolean
+          is_banned?: boolean
           last_donation_date?: string | null
           lat?: number | null
           lng?: number | null
@@ -181,15 +189,20 @@ export type Database = {
           onboarded?: boolean
           permanent_address?: string
           phone?: string
+          restricted?: boolean
           updated_at?: string
+          valid_report_count?: number
         }
         Update: {
+          ban_reason?: string | null
+          banned_at?: string | null
           blood_group?: Database["public"]["Enums"]["blood_group"] | null
           created_at?: string
           current_address?: string
           full_name?: string
           id?: string
           is_available?: boolean
+          is_banned?: boolean
           last_donation_date?: string | null
           lat?: number | null
           lng?: number | null
@@ -197,7 +210,9 @@ export type Database = {
           onboarded?: boolean
           permanent_address?: string
           phone?: string
+          restricted?: boolean
           updated_at?: string
+          valid_report_count?: number
         }
         Relationships: []
       }
@@ -239,11 +254,188 @@ export type Database = {
           },
         ]
       }
+      support_tickets: {
+        Row: {
+          admin_reply: string | null
+          category: string
+          contact_email: string
+          created_at: string
+          id: string
+          message: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_reply?: string | null
+          category?: string
+          contact_email?: string
+          created_at?: string
+          id?: string
+          message: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_reply?: string | null
+          category?: string
+          contact_email?: string
+          created_at?: string
+          id?: string
+          message?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_reports: {
+        Row: {
+          created_at: string
+          details: string
+          id: string
+          reason: Database["public"]["Enums"]["report_reason"]
+          reported_user_id: string
+          reporter_id: string
+          request_id: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["report_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string
+          id?: string
+          reason: Database["public"]["Enums"]["report_reason"]
+          reported_user_id: string
+          reporter_id: string
+          request_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string
+          id?: string
+          reason?: Database["public"]["Enums"]["report_reason"]
+          reported_user_id?: string
+          reporter_id?: string
+          request_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_reports_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "blood_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      admin_reports: {
+        Args: never
+        Returns: {
+          created_at: string
+          details: string
+          id: string
+          reason: Database["public"]["Enums"]["report_reason"]
+          reported_banned: boolean
+          reported_name: string
+          reported_user_id: string
+          reporter_id: string
+          reporter_name: string
+          status: Database["public"]["Enums"]["report_status"]
+        }[]
+      }
+      admin_review_report: {
+        Args: {
+          p_report_id: string
+          p_status: Database["public"]["Enums"]["report_status"]
+        }
+        Returns: undefined
+      }
+      admin_set_ban: {
+        Args: { p_banned: boolean; p_reason?: string; p_user_id: string }
+        Returns: undefined
+      }
+      admin_stats: { Args: never; Returns: Json }
+      admin_tickets: {
+        Args: never
+        Returns: {
+          admin_reply: string
+          category: string
+          contact_email: string
+          created_at: string
+          id: string
+          message: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_update_ticket: {
+        Args: {
+          p_reply?: string
+          p_status: Database["public"]["Enums"]["ticket_status"]
+          p_ticket_id: string
+        }
+        Returns: undefined
+      }
+      admin_users: {
+        Args: { p_search?: string }
+        Returns: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          created_at: string
+          current_address: string
+          email: string
+          full_name: string
+          id: string
+          is_available: boolean
+          is_banned: boolean
+          last_donation_date: string
+          phone: string
+          restricted: boolean
+          valid_report_count: number
+        }[]
+      }
       can_donate_to: {
         Args: {
           donor: Database["public"]["Enums"]["blood_group"]
@@ -282,6 +474,14 @@ export type Database = {
           response_status: Database["public"]["Enums"]["response_status"]
         }[]
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_app_admin: { Args: { _user_id?: string }; Returns: boolean }
       is_eligible: { Args: { last_donation: string }; Returns: boolean }
       nearby_requests: {
         Args: never
@@ -305,9 +505,22 @@ export type Database = {
       }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       blood_group: "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-"
+      report_reason:
+        | "fake_info"
+        | "fraud_scam"
+        | "harassment"
+        | "spam"
+        | "illegal_blood"
+        | "impersonation"
+        | "platform_manipulation"
+        | "harmful_content"
+        | "other"
+      report_status: "pending" | "valid" | "invalid"
       request_status: "active" | "fulfilled" | "cancelled" | "expired"
       response_status: "accepted" | "declined"
+      ticket_status: "open" | "in_progress" | "resolved" | "closed"
       urgency_level: "critical" | "urgent" | "normal"
     }
     CompositeTypes: {
@@ -436,9 +649,23 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       blood_group: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+      report_reason: [
+        "fake_info",
+        "fraud_scam",
+        "harassment",
+        "spam",
+        "illegal_blood",
+        "impersonation",
+        "platform_manipulation",
+        "harmful_content",
+        "other",
+      ],
+      report_status: ["pending", "valid", "invalid"],
       request_status: ["active", "fulfilled", "cancelled", "expired"],
       response_status: ["accepted", "declined"],
+      ticket_status: ["open", "in_progress", "resolved", "closed"],
       urgency_level: ["critical", "urgent", "normal"],
     },
   },
