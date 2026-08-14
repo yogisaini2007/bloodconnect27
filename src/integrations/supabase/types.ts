@@ -251,8 +251,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      chat_threads: {
-        Args: never
+      chat_threads_for: {
+        Args: { p_user: string }
         Returns: {
           blood_group: Database["public"]["Enums"]["blood_group"]
           hospital_name: string
@@ -269,8 +269,8 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
-      find_donors: {
-        Args: { p_request_id: string }
+      find_donors_for: {
+        Args: { p_request_id: string; p_user: string }
         Returns: {
           blood_group: Database["public"]["Enums"]["blood_group"]
           display_name: string
@@ -282,7 +282,6 @@ export type Database = {
           response_status: Database["public"]["Enums"]["response_status"]
         }[]
       }
-      has_responded: { Args: { p_request_id: string }; Returns: boolean }
       is_eligible: { Args: { last_donation: string }; Returns: boolean }
       nearby_requests: {
         Args: never

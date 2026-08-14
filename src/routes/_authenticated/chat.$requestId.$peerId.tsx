@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Phone, Send } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
+import { getChatThreads, type ChatThread } from "@/lib/matching.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 type Message = Database["public"]["Tables"]["messages"]["Row"];
-type Thread = Database["public"]["Functions"]["chat_threads"]["Returns"][number];
+type Thread = ChatThread;
 
 export const Route = createFileRoute("/_authenticated/chat/$requestId/$peerId")({
   component: ChatThread,
@@ -22,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/chat/$requestId/$peerId")(
 function ChatThread() {
   const { requestId, peerId } = Route.useParams();
   const { userId } = useAuth();
+  const fetchThreads = useServerFn(getChatThreads);
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -33,9 +36,7 @@ function ChatThread() {
     queryKey: ["threads", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("chat_threads");
-      if (error) throw error;
-      return (data ?? []) as Thread[];
+      return await fetchThreads();
     },
     select: (rows) => rows.find((t) => t.request_id === requestId && t.peer_id === peerId) ?? null,
   });

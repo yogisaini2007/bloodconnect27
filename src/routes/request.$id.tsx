@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDistance, formatDateTime, daysUntilEligible } from "@/lib/blood";
 import type { Database } from "@/integrations/supabase/types";
+import { getRequestDonors, type Donor as DonorRow } from "@/lib/matching.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import {
   Phone,
@@ -23,7 +25,8 @@ import {
 } from "lucide-react";
 
 type BloodRequest = Database["public"]["Tables"]["blood_requests"]["Row"];
-type Donor = Database["public"]["Functions"]["find_donors"]["Returns"][number];
+type Donor = DonorRow;
+
 
 export const Route = createFileRoute("/request/$id")({
   component: RequestDetail,
@@ -58,14 +61,13 @@ function RequestDetail() {
   });
 
   const isOwner = !!userId && request.data?.requester_id === userId;
+  const fetchDonors = useServerFn(getRequestDonors);
 
   const donors = useQuery({
     queryKey: ["donors", id],
     enabled: isOwner,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("find_donors", { p_request_id: id });
-      if (error) throw error;
-      return (data ?? []) as Donor[];
+      return await fetchDonors({ data: { requestId: id } });
     },
   });
 
