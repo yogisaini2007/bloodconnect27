@@ -251,38 +251,10 @@ export type Database = {
         }
         Returns: boolean
       }
-      chat_threads: {
-        Args: never
-        Returns: {
-          blood_group: Database["public"]["Enums"]["blood_group"]
-          hospital_name: string
-          last_message: string
-          last_message_at: string
-          peer_id: string
-          peer_name: string
-          peer_phone: string
-          request_id: string
-          status: Database["public"]["Enums"]["request_status"]
-        }[]
-      }
       distance_km: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
-      find_donors: {
-        Args: { p_request_id: string }
-        Returns: {
-          blood_group: Database["public"]["Enums"]["blood_group"]
-          display_name: string
-          distance_km: number
-          donor_id: string
-          has_responded: boolean
-          is_available: boolean
-          phone: string
-          response_status: Database["public"]["Enums"]["response_status"]
-        }[]
-      }
-      has_responded: { Args: { p_request_id: string }; Returns: boolean }
       is_eligible: { Args: { last_donation: string }; Returns: boolean }
       nearby_requests: {
         Args: never
