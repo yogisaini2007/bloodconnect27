@@ -7,7 +7,6 @@ import { AppHeader, EmptyState, CardSkeleton } from "@/components/app/shell";
 import { BottomNav } from "@/components/app/bottom-nav";
 import { BloodChip } from "@/components/app/chips";
 import { timeAgo } from "@/lib/blood";
-import type { Database } from "@/integrations/supabase/types";
 import { getChatThreads, type ChatThread } from "@/lib/matching.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { MessageCircle } from "lucide-react";
@@ -20,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/chat/")({
 
 function ChatList() {
   const { userId } = useAuth();
+  const fetchThreads = useServerFn(getChatThreads);
   useRealtime("chat-list", "messages", [["threads", userId]]);
 
   const threads = useQuery({

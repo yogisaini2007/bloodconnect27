@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/chat/$requestId/$peerId")(
 function ChatThread() {
   const { requestId, peerId } = Route.useParams();
   const { userId } = useAuth();
+  const fetchThreads = useServerFn(getChatThreads);
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
