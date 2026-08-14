@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 
 type BloodRequest = Database["public"]["Tables"]["blood_requests"]["Row"];
-type Donor = Database["public"]["Functions"]["find_donors"]["Returns"][number];
+type Donor = DonorRow;
+
 
 export const Route = createFileRoute("/request/$id")({
   component: RequestDetail,
