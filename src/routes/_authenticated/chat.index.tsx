@@ -8,9 +8,11 @@ import { BottomNav } from "@/components/app/bottom-nav";
 import { BloodChip } from "@/components/app/chips";
 import { timeAgo } from "@/lib/blood";
 import type { Database } from "@/integrations/supabase/types";
+import { getChatThreads, type ChatThread } from "@/lib/matching.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { MessageCircle } from "lucide-react";
 
-type Thread = Database["public"]["Functions"]["chat_threads"]["Returns"][number];
+type Thread = ChatThread;
 
 export const Route = createFileRoute("/_authenticated/chat/")({
   component: ChatList,
@@ -24,9 +26,7 @@ function ChatList() {
     queryKey: ["threads", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("chat_threads");
-      if (error) throw error;
-      return (data ?? []) as Thread[];
+      return await fetchThreads();
     },
   });
 
