@@ -1,0 +1,12 @@
+REVOKE ALL ON FUNCTION public.apply_moderation_outcome() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.moderate_on_report() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.notify_donors_on_request() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.notify_on_message() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.notify_on_response() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.can_message(uuid, uuid, uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.has_responded(uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION private.is_banned(uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.has_role(uuid, public.app_role) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.is_app_admin(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_app_admin(uuid) TO authenticated;
