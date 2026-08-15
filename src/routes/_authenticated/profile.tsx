@@ -9,7 +9,18 @@ import { BloodChip } from "@/components/app/chips";
 import { Button } from "@/components/ui/button";
 import { daysUntilEligible, DONATION_COOLDOWN_DAYS } from "@/lib/blood";
 import { toast } from "sonner";
-import { Droplet, Info, LogOut, MapPin, Pencil, Phone, ShieldCheck, Compass } from "lucide-react";
+import {
+  Droplet,
+  Info,
+  LogOut,
+  MapPin,
+  Pencil,
+  Phone,
+  ShieldCheck,
+  Compass,
+  LifeBuoy,
+  Lock,
+} from "lucide-react";
 import { resetTour } from "@/components/app/onboarding-tour";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -33,6 +44,16 @@ function ProfileScreen() {
         .eq("status", "accepted");
       if (error) throw error;
       return count ?? 0;
+    },
+  });
+
+  const isAdmin = useQuery({
+    queryKey: ["is-admin", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("is_app_admin", { _user_id: userId! });
+      if (error) throw error;
+      return !!data;
     },
   });
 
@@ -156,6 +177,20 @@ function ProfileScreen() {
         >
           <Compass className="mr-2 size-4" /> Restart app tour
         </Button>
+
+        <Button asChild variant="ghost" className="h-11 w-full">
+          <Link to="/help">
+            <LifeBuoy className="mr-2 size-4" /> Help center & complaints
+          </Link>
+        </Button>
+
+        {isAdmin.data === true && (
+          <Button asChild variant="outline" className="h-11 w-full">
+            <Link to="/admin">
+              <Lock className="mr-2 size-4" /> Admin panel
+            </Link>
+          </Button>
+        )}
 
         <Button asChild variant="ghost" className="h-11 w-full">
           <Link to="/about">
