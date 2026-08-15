@@ -111,7 +111,10 @@ function AdminPanel() {
       p_report_id: id,
       p_status: status,
     });
-    if (error) return toast.error("Action failed.");
+    if (error) {
+      toast.error("Action failed.");
+      return;
+    }
     toast.success(status === "valid" ? "Marked valid" : "Marked invalid");
     refreshAll();
   }
@@ -120,9 +123,12 @@ function AdminPanel() {
     const { error } = await supabase.rpc("admin_set_ban", {
       p_user_id: id,
       p_banned: banned,
-      p_reason: banned ? "Banned by BloodConnect admin after review" : null,
+      p_reason: banned ? "Banned by BloodConnect admin after review" : undefined,
     });
-    if (error) return toast.error("Action failed.");
+    if (error) {
+      toast.error("Action failed.");
+      return;
+    }
     toast.success(banned ? "Account banned" : "Ban removed");
     refreshAll();
   }
@@ -132,7 +138,10 @@ function AdminPanel() {
       p_ticket_id: id,
       p_status: "resolved",
     });
-    if (error) return toast.error("Action failed.");
+    if (error) {
+      toast.error("Action failed.");
+      return;
+    }
     refreshAll();
   }
 
@@ -324,7 +333,7 @@ function AdminPanel() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value?: number; accent?: boolean }) {
+function Stat({ label, value, accent }: { label: string; value?: number | undefined; accent?: boolean }) {
   return (
     <div className="rounded-xl border border-border bg-card p-3 text-center">
       <p className={cn("text-2xl font-bold tabular-nums", accent && "text-primary")}>{value ?? "—"}</p>
