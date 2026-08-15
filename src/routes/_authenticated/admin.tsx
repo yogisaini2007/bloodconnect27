@@ -123,7 +123,7 @@ function AdminPanel() {
     const { error } = await supabase.rpc("admin_set_ban", {
       p_user_id: id,
       p_banned: banned,
-      p_reason: banned ? "Banned by BloodConnect admin after review" : undefined,
+      ...(banned ? { p_reason: "Banned by BloodConnect admin after review" } : {}),
     });
     if (error) {
       toast.error("Action failed.");
