@@ -47,7 +47,7 @@ const CATEGORIES = [
   "Other",
 ] as const;
 
-const BAN_CONDITIONS = [
+const BAN_CONDITIONS: [string, string][] = [
   ["Fake information", "Fake blood group, location, donor details or emergency request."],
   ["Fraud or scam", "Asking money for blood, fake donation requests, phishing links."],
   ["Harassment & abuse", "Abusive language, threats, bullying, repeated unwanted contact."],
