@@ -13,6 +13,7 @@ import { Phone, Send } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 import { getChatThreads, type ChatThread } from "@/lib/matching.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { ReportDialog } from "@/components/app/report-dialog";
 
 type Message = Database["public"]["Tables"]["messages"]["Row"];
 type Thread = ChatThread;
@@ -88,15 +89,22 @@ function ChatThread() {
         back="/chat"
         tone="brand"
         action={
-          peer.data?.peer_phone ? (
-            <a
-              href={`tel:${peer.data.peer_phone}`}
-              aria-label="Call"
-              className="flex size-10 items-center justify-center rounded-full bg-primary-dark/40"
-            >
-              <Phone className="size-5" />
-            </a>
-          ) : undefined
+          <span className="flex items-center gap-2">
+            {peer.data?.peer_phone && (
+              <a
+                href={`tel:${peer.data.peer_phone}`}
+                aria-label="Call"
+                className="flex size-10 items-center justify-center rounded-full bg-primary-dark/40"
+              >
+                <Phone className="size-5" />
+              </a>
+            )}
+            <ReportDialog
+              reportedUserId={peerId}
+              reportedName={peer.data?.peer_name ?? null}
+              requestId={requestId}
+            />
+          </span>
         }
       />
 

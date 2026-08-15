@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, useRealtime } from "@/hooks/useProfile";
 import { AppHeader, EmptyState, SectionTitle, CardSkeleton } from "@/components/app/shell";
+import { ReportDialog } from "@/components/app/report-dialog";
 import { BloodChip, PriorityChip, StatusChip } from "@/components/app/chips";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -156,7 +157,16 @@ function RequestDetail() {
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background pb-28">
-      <AppHeader title={isOwner ? "Your request" : "Emergency request"} back="/home" tone="brand" />
+      <AppHeader
+        title={isOwner ? "Your request" : "Emergency request"}
+        back="/home"
+        tone="brand"
+        action={
+          !isOwner && r ? (
+            <ReportDialog reportedUserId={r.requester_id} reportedName={r.patient_name} requestId={r.id} />
+          ) : undefined
+        }
+      />
 
       <div className="space-y-5 px-4 py-5">
         <section className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
